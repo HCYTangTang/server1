@@ -9,12 +9,14 @@ app.use(cors({
 
 const clientId = "SliOUwwJyx40KDhySwCf";
 const clientSecret = "r1Z3AkEecz";
-const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
+const naverSearchApiUrl = "https://openapi.naver.com/v1/search/shop.json";
+const customSearchApiUrl = "https://port-0-server1-koh2xlj138h9k.sel4.cloudtype.app/search";
 
-app.get('/search/:keyword/:start', async (req, res) => {
+// 키워드 검색 엔드포인트
+app.get('/search/keyword/:keyword/:start', async (req, res) => {
   const { keyword, start } = req.params;
   try {
-    const response = await axios.get(apiUrl, {
+    const response = await axios.get(naverSearchApiUrl, {
       headers: {
         "X-Naver-Client-Id": clientId,
         "X-Naver-Client-Secret": clientSecret,
@@ -25,8 +27,26 @@ app.get('/search/:keyword/:start', async (req, res) => {
         display: 100,
       },
     });
-    
+
     res.json(response.data.items);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error' });
+  }
+});
+
+// 순위 검색 엔드포인트
+app.get('/search/rank/:storeName/:start', async (req, res) => {
+  const { storeName, start } = req.params;
+  try {
+    const response = await axios.get(`${customSearchApiUrl}/${storeName}/${start}`);
+    
+    const items = response.data.map((item, index) => {
+      item.rank = start - 1 + index;
+      return item;
+    });
+    
+    res.json(items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
