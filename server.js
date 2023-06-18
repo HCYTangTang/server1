@@ -7,13 +7,26 @@ app.use(cors({
   origin: '*',
 }));
 
-app.get('/product/:id', async (req, res) => {
-  const { id } = req.params;
+const clientId = "SliOUwwJyx40KDhySwCf";
+const clientSecret = "r1Z3AkEecz";
+const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
+
+app.get('/search/:keyword/:start', async (req, res) => {
+  const { keyword, start } = req.params;
   try {
-    const { data } = await axios.get(`https://search.shopping.naver.com/product/${id}`);
-    // 원하는 데이터를 추출합니다.
-    const popularDegree = extractPopularDegree(data);
-    res.json({ popularDegree });
+    const response = await axios.get(apiUrl, {
+      headers: {
+        "X-Naver-Client-Id": clientId,
+        "X-Naver-Client-Secret": clientSecret,
+      },
+      params: {
+        query: keyword,
+        start: start,
+        display: 100,
+      },
+    });
+
+    res.json(response.data.items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred' });
