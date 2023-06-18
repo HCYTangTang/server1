@@ -35,7 +35,7 @@ app.get('/search/:keyword/:start', async (req, res) => {
 });
 
 // 순위 검색 엔드포인트
-app.get('/search/:keyword/:storeName/:start', async (req, res) => {
+app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
   const { keyword, storeName, start } = req.params;
   try {
     const response = await axios.get(`${apiUrl}/${keyword}/${storeName}/${start}`);
