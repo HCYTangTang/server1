@@ -33,7 +33,7 @@ app.get('/search/:keyword/:storeName/:start', async (req, res) => {
       return item;
     });
     
-    res.json(items);
+    res.json(response.data.items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
