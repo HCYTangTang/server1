@@ -12,7 +12,7 @@ const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
 
 app.get('/search/:keyword/:storeName/:start', async (req, res) => {
-  const { keyword,storeName, start } = req.params;
+  const { keyword, storeName, start } = req.params;
   try {
     const response = await axios.get(apiUrl, {
       headers: {
@@ -33,7 +33,7 @@ app.get('/search/:keyword/:storeName/:start', async (req, res) => {
       return item;
     });
     
-    res.json(response.data.items);
+    res.json(items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
