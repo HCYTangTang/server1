@@ -38,8 +38,19 @@ app.get('/search/:keyword/:start', async (req, res) => {
 app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
   const { keyword, storeName, start } = req.params;
   try {
-    const response = await axios.get(`${apiUrl}?query=${keyword}&store=${storeName}&start=${start}`);
-    
+    const response = await axios.get(apiUrl, {
+      headers: {
+        "X-Naver-Client-Id": clientId,
+        "X-Naver-Client-Secret": clientSecret,
+      },
+      params: {
+        query: keyword,
+        store: storeName,
+        start: start,
+        display: 100,
+      },
+    });
+
     res.json(response.data.items);
   } catch (error) {
     console.error(error);
