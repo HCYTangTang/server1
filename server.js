@@ -38,10 +38,9 @@ app.get('/search/:keyword/:start', async (req, res) => {
 app.get('/search/:keyword/:storeName/:start', async (req, res) => {
   const { keyword, storeName, start } = req.params;
   try {
-    const apiUrl = "https://port-0-ykad-koh2xlikf0dph.sel4.cloudtype.app/search";
     const response = await axios.get(`${apiUrl}/${keyword}/${storeName}/${start}`);
     
-    res.json(response.data);
+    res.json(response.data.items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
