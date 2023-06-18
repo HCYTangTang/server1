@@ -32,9 +32,6 @@ app.get('/search/:keyword/:storeName/:start', async (req, res) => {
       }
       return item;
     });
-  } else {
-    items = response.data.items;
-  }
     
     res.json(response.data.items);
   } catch (error) {
