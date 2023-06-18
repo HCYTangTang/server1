@@ -38,7 +38,7 @@ app.get('/search/:keyword/:start', async (req, res) => {
 app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
   const { keyword, storeName, start } = req.params;
   try {
-    const response = await axios.get(`${apiUrl}/${keyword}/${storeName}/${start}`);
+    const response = await axios.get(`${apiUrl}?query=${keyword}&store=${storeName}&start=${start}`);
     
     res.json(response.data.items);
   } catch (error) {
