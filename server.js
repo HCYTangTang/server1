@@ -11,8 +11,8 @@ const clientId = "SliOUwwJyx40KDhySwCf";
 const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
 
-app.get('/search/:keyword/:start', async (req, res) => {
-  const { keyword, start } = req.params;
+app.get('/search/:keyword/:storeName/:start', async (req, res) => {
+  const { keyword, storeName, start } = req.params;
   try {
     const response = await axios.get(apiUrl, {
       headers: {
@@ -25,8 +25,15 @@ app.get('/search/:keyword/:start', async (req, res) => {
         display: 100,
       },
     });
-
-    res.json(response.data.items);
+    
+    const items = response.data.items.map((item, index) => {
+      if (item.mallName === storeName) {
+        item.rank = start - 1 + index;
+      }
+      return item;
+    });
+    
+    res.json(items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
