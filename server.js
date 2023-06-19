@@ -2,6 +2,7 @@ const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const mongoose = require('mongoose');
 
 app.use(cors({
   origin: '*',
@@ -10,6 +11,18 @@ app.use(cors({
 const clientId = "SliOUwwJyx40KDhySwCf";
 const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
+
+const VisitorSchema = new mongoose.Schema({
+  ip: String,
+  visitDate: { type: Date, default: Date.now },
+});
+const Visitor = mongoose.model('Visitor', VisitorSchema);
+
+app.get('/visit', async (req, res) => {
+  const visitor = new Visitor({ ip: req.ip });
+  await visitor.save();
+  // req.ip DB 저장
+});
 
 // 키워드 검색 엔드포인트
 app.get('/search/:keyword/:start', async (req, res) => {
@@ -56,6 +69,12 @@ app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Error' });
   }
+});
+
+// 방문자 수
+app.get('/visit', (req, res) => {
+  visitorCount++;
+  res.send({ visitorCount });
 });
 
 app.listen(3000, () => console.log('Server Open'));
