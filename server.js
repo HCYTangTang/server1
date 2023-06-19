@@ -12,6 +12,8 @@ const clientId = "SliOUwwJyx40KDhySwCf";
 const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
 
+mongoose.connect('mongodb://localhost/visitors', {useNewUrlParser: true, useUnifiedTopology: true});
+
 const VisitorSchema = new mongoose.Schema({
   ip: String,
   visitDate: { type: Date, default: Date.now },
@@ -72,8 +74,10 @@ app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
 });
 
 // 방문자 수
-app.get('/visit', (req, res) => {
-  visitorCount++;
+app.get('/visit', async (req, res) => {
+  const visitor = new Visitor({ ip: req.ip });
+  await visitor.save();
+  const visitorCount = await Visitor.countDocuments();
   res.send({ visitorCount });
 });
 
