@@ -2,7 +2,7 @@ const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const mongoose = require('mongoose');
+let visitorCount = 0;
 
 app.use(cors({
   origin: '*',
@@ -11,20 +11,6 @@ app.use(cors({
 const clientId = "SliOUwwJyx40KDhySwCf";
 const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
-
-mongoose.connect('mongodb://localhost/visitors', {useNewUrlParser: true, useUnifiedTopology: true});
-
-const VisitorSchema = new mongoose.Schema({
-  ip: String,
-  visitDate: { type: Date, default: Date.now },
-});
-const Visitor = mongoose.model('Visitor', VisitorSchema);
-
-app.get('/visit', async (req, res) => {
-  const visitor = new Visitor({ ip: req.ip });
-  await visitor.save();
-  // req.ip DB 저장
-});
 
 // 키워드 검색 엔드포인트
 app.get('/search/:keyword/:start', async (req, res) => {
@@ -74,10 +60,8 @@ app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
 });
 
 // 방문자 수
-app.get('/visit', async (req, res) => {
-  const visitor = new Visitor({ ip: req.ip });
-  await visitor.save();
-  const visitorCount = await Visitor.countDocuments();
+app.get('/visit', (req, res) => {
+  visitorCount++;
   res.send({ visitorCount });
 });
 
