@@ -74,9 +74,8 @@ app.get('/tracking/:keyword/:start', async (req, res) => {
         display: 100,
       },
     });
-    const filteredItems = response.data.items.filter(item => item.productId === productId);
     
-    res.json(filteredItems);
+    res.json(response.data.items);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
