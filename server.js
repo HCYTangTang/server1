@@ -60,8 +60,8 @@ app.get('/rank/:keyword/:storeName/:start', async (req, res) => {
 });
 
 // 순위 추적 엔드포인트
-app.get('/tracking/:keyword/:start', async (req, res) => {
-  const { keyword, start } = req.params;
+app.get('/tracking/:keyword/:productId/:start', async (req, res) => {
+  const { keyword, productId, start } = req.params;
   try {
     const response = await axios.get(apiUrl, {
       headers: {
@@ -74,8 +74,9 @@ app.get('/tracking/:keyword/:start', async (req, res) => {
         display: 100,
       },
     });
-
-    res.json(response.data.items);
+    const filteredItems = response.data.items.filter(item => item.productId === productId);
+    
+    res.json(filteredItems);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error' });
