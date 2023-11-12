@@ -8,8 +8,8 @@ app.use(cors({
   origin: '*',
 }));
 
-const clientId = "5pRFVCEQ94Fz8bSqtSWg";
-const clientSecret = "hwGYA9qNhm";
+const clientId = "SliOUwwJyx40KDhySwCf";
+const clientSecret = "r1Z3AkEecz";
 const apiUrl = "https://openapi.naver.com/v1/search/shop.json";
 
 // 키워드 검색 엔드포인트
