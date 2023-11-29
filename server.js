@@ -1,23 +1,26 @@
 const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 let visitorCount = 0;
 
 app.use(cors({ origin: '*' }));
 
+const algorithm = 'aes-256-ctr';
+const password = '90WDK1dw0183pqlxcv431283WE462CZXC84Q3QDd4w81cxz234q8w3d5142';
 
-const apiKeys = [
-  { clientId: "SliOUwwJyx40KDhySwCf", clientSecret: "r1Z3AkEecz" },
-  { clientId: "e7aRAHnNdbVvYpqoEbgJ", clientSecret: "1x4VuVpRoU" },
-  { clientId: "gpUQMPZQ2dpFeR5ks9JN", clientSecret: "0xzwuO6ZTx" },
-  { clientId: "Efxk5ItHSgqhdcv6aZzs", clientSecret: "jI6LaAHL5s" },
-  { clientId: "2OctgbbZV7OHrrNyeYZ_", clientSecret: "i8ejJ77dNN" },
-  { clientId: "P2btjxecgeeos_tGfM9A", clientSecret: "LiktVAyUGL" },
-  { clientId: "EJWNBF8JcXRecGzzHYzw", clientSecret: "kA6eLQrz7l" },
-  { clientId: "PcERsS8d9RsClB_oJIlx", clientSecret: "aoHNvCxWcf" },
-  { clientId: "7cFnxnLYivh4iv6QpQhJ", clientSecret: "aH_Mc0jU1o" },
-];
+function decrypt(text) {
+  const decipher = crypto.createDecipher(algorithm, password);
+  let dec = decipher.update(text, 'hex', 'utf8');
+  dec += decipher.final('utf8');
+  return JSON.parse(dec);
+}
+
+const encryptedKeys = fs.readFileSync(path.join(__dirname, 'encryptedKeys.txt'), 'utf8');
+const apiKeys = decrypt(encryptedKeys);
 
 let currentKeyIndex = 0;
 
