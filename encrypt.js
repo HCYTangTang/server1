@@ -25,7 +25,7 @@ const apiKeys = [
 ];
 
 const algorithm = 'aes-256-ctr';
-const password = '90WDK1dw0183pqlxcv431283WE462CZXC84Q3QDd4w81cxz234q8w3d5142'; // 강력한 비밀번호를 설정하세요.
+const password = '90WDK1dw0183pqlxcv431283WE462CZXC84Q3QDd4w81cxz234q8w3d5142';
 
 function encrypt(text) {
   const cipher = crypto.createCipher(algorithm, password);
